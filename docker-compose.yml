@@ -1,0 +1,12 @@
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    # NOTE: mounting is optional but makes it easier to develop in the container
+    volumes:
+      - ./src:/app/src
+    environment:
+      # log to stdout as soon as the log is created
+      - PYTHONUNBUFFERED=1
