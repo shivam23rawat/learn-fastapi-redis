@@ -13,6 +13,9 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -31,6 +34,28 @@ jobs:
       - name: Set up environment variables
         run: |
           echo "IMAGE_TAG=$(date +'%Y-%m-%d_%H-%M-%S')-${{ github.run_id }}" >> $GITHUB_ENV
+
+      - name: Install Python and dependencies
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install ruff
+        run: pip install ruff
+
+      - name: Run ruff
+        run: ruff src/
+
+      - name: Run ruff with fix
+        run: ruff --fix src/
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add .
+          git commit -m "ci: chore(lint): 🔧 Apply ruff fixes"
+          git push
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
