@@ -45,10 +45,17 @@ jobs:
         run: pip install ruff
 
       - name: Run ruff
-        run: ruff src/
+        uses: astral-sh/ruff-action@v3
+        with:
+          version: v0.11.0
+          src: ./src
 
       - name: Run ruff with fix
-        run: ruff --fix src/
+        uses: astral-sh/ruff-action@v3
+        with:
+          version: v0.11.0
+          args: check --fix
+          src: ./src
 
       - name: Commit and push changes
         run: |
