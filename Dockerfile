@@ -16,5 +16,8 @@ COPY src/ /app/src
 # Expose the port that the app runs on
 EXPOSE 8000
 
+# Set the maintainer label
+LABEL maintainer="shivam23rawat <shivamrawat2000@gmail.com>"
+
 # Command to run the application
 CMD ["fastapi", "run", "src/app.py", "--host", "0.0.0.0", "--port", "8000"]
