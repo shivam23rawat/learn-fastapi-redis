@@ -17,6 +17,7 @@ jobs:
 
     permissions:
       contents: write
+      packages: write
 
     steps:
       - name: Check out repository code
