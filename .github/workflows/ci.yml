@@ -2,6 +2,7 @@ name: FastAPI CI Pipeline
 run-name: ${{ github.actor }} is building this FastAPI app ! 🚀
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
