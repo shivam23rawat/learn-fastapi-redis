@@ -17,6 +17,7 @@ jobs:
 
     permissions:
       contents: write
+      packages: write
 
     steps:
       - name: Check out repository code
@@ -48,13 +49,13 @@ jobs:
       - name: Run ruff
         uses: astral-sh/ruff-action@v3
         with:
-          version: v0.11.0
+          version: 0.11.0
           src: ./src
 
       - name: Run ruff with fix
         uses: astral-sh/ruff-action@v3
         with:
-          version: v0.11.0
+          version: 0.11.0
           args: check --fix
           src: ./src
 
@@ -63,8 +64,12 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add .
-          git commit -m "ci: chore(lint): 🔧 Apply ruff fixes"
-          git push
+          if git diff-index --quiet HEAD; then
+            echo "No changes to commit"
+          else
+            git commit -m "ci: chore(lint): 🔧 Apply ruff fixes"
+            git push
+          fi
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
