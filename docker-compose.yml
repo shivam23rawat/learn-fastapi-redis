@@ -10,6 +10,8 @@ services:
     environment:
       # log to stdout as soon as the log is created
       - PYTHONUNBUFFERED=1
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     
   redis:
     # using alpine image for a smaller footprint
