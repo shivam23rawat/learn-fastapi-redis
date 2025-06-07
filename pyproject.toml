@@ -38,3 +38,17 @@ dependencies = [
     "watchfiles==1.0.4",
     "websockets==15.0",
 ]
+
+[dependency-groups]
+dev = [
+    "commitizen>=4.8.2",
+    "pre-commit>=4.2.0",
+]
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+tag_format = "^(?P<major>0|[1-9]\\d*)\\.(?P<minor>0|[1-9]\\d*)\\.(?P<patch>0|[1-9]\\d*)"
+version_scheme = "semver2"
+version_provider = "uv"
+update_changelog_on_bump = true
+major_version_zero = true
