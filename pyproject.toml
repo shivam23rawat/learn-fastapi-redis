@@ -41,8 +41,10 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "black>=25.1.0",
     "commitizen>=4.8.2",
     "pre-commit>=4.2.0",
+    "ruff>=0.11.13",
 ]
 
 [tool.commitizen]
@@ -52,3 +54,10 @@ version_scheme = "semver2"
 version_provider = "uv"
 update_changelog_on_bump = true
 major_version_zero = true
+
+[tool.ruff]
+select = ["ALL"]
+line-length = 79
+
+[tool.black]
+line-length = 79
