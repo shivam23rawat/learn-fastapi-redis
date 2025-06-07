@@ -15,10 +15,10 @@ src.api.v1.users
 
 from fastapi import APIRouter
 
-from src.api.v1.users import router as user_router
+from src.api.v1.posts import router as post_router
 
 router = APIRouter()
 
 # NOTE: duplicate APIs may show up in swagger but atleast the APIs get clubbed
 # under the same version
-router.include_router(user_router, prefix="/v1", tags=["v1"])
+router.include_router(post_router, prefix="/v1", tags=["v1"])
