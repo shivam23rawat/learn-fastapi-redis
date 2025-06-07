@@ -1,32 +1,45 @@
-"""
-This file creates the FastAPI app instance following the `Factory Function` design pattern.
+r"""Create the FastAPI app instance using Factory Method.
 
 Usage
 -----
-Run the app.py file from the root of the repository using `fastapi run .\src\app.py`
+Run the app.py file from the root of the repository using
+`fastapi run .\src\app.py`
 """
 
+from collections.abc import AsyncGenerator
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
+
 from src.api.v1.router import router as v1_router
+from src.client import HttpClient
 
 
 def create_app() -> FastAPI:
-    """
-    Creates and configures an instance of the FastAPI application.
+    """Create and configure an instance of the FastAPI application.
 
     Returns
     -------
     application
-        An instance of the FastAPI application with the specified title, description, and version.
+        An instance of the FastAPI application with the specified title,
+        description, and version.
+
     """
+
+    @asynccontextmanager
+    async def lifespan(_app: FastAPI) -> AsyncGenerator[None]:
+        yield
+        await HttpClient().close()  # Singleton close
+
     application = FastAPI(
         title="FastAPI Redis Integration Demo",
-        description="This app demonstrates the integration of FastAPI with Redis",
+        description=(
+            "This app demonstrates the integration of FastAPI with Redis"
+        ),
         version="0.1.0",
+        lifespan=lifespan,
     )
-
     application.include_router(v1_router)
-
     return application
 
 
