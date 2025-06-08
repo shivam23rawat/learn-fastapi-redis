@@ -12,6 +12,8 @@ from datetime import timedelta
 
 from redis.asyncio import Redis
 
+from src.logger import get_logger
+
 
 class AsyncRedisClient:
     """Async interface for interacting with a Redis database."""
@@ -22,6 +24,13 @@ class AsyncRedisClient:
         port: int = 6379,
         db: int = 0,
     ) -> None:
+        self.logger = get_logger("AsyncRedisClient")
+        self.logger.debug(
+            "Connecting to Redis at %s:%d, db=%d",
+            host,
+            port,
+            db,
+        )
         self.client = Redis(
             host=host,
             port=port,
@@ -35,7 +44,11 @@ class AsyncRedisClient:
         value: str | list | dict,
         ex: timedelta = timedelta(minutes=5),
     ) -> bool:
-        """Set a key-value pair in the Redis database."""
+        self.logger.debug(
+            "Setting key '%s' in Redis with expiry %s.",
+            key,
+            ex,
+        )
         serialized_value = json.dumps(value)
         return await self.client.set(
             name=key,
@@ -44,10 +57,12 @@ class AsyncRedisClient:
         )
 
     async def get(self, key: str) -> str | None:
-        """Get the value associated with a key from the Redis database."""
+        self.logger.debug("Getting key '%s' from Redis.", key)
         serialized_value = await self.client.get(key)
         if serialized_value is not None:
+            self.logger.debug("Cache hit for key '%s'.", key)
             return json.loads(serialized_value)
+        self.logger.debug("Cache miss for key '%s'.", key)
         return None
 
 

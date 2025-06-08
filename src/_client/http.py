@@ -7,12 +7,18 @@ from typing import Any
 
 import httpx
 
+from src.logger import get_logger
+
 
 class HttpClient:
     """A generic HTTP client for async GET and POST requests."""
 
     def __init__(self, base_url: str) -> None:
-        """Initialize the AsyncClient instance."""
+        self.logger = get_logger("HttpClient")
+        self.logger.debug(
+            "Initializing HttpClient with base_url: %s",
+            base_url,
+        )
         self.client = httpx.AsyncClient(base_url=base_url)
 
     async def get(
@@ -30,8 +36,18 @@ class HttpClient:
             dict[str, object]: The JSON response.
 
         """
+        self.logger.debug(
+            "Sending GET request to %s with params: %s",
+            endpoint,
+            params,
+        )
         response = await self.client.get(endpoint, params=params)
         response.raise_for_status()
+        self.logger.info(
+            "Received response for GET %s with status %d",
+            endpoint,
+            response.status_code,
+        )
         return response.json()
 
     async def post(
@@ -49,10 +65,21 @@ class HttpClient:
             dict[str, object]: The JSON response.
 
         """
+        self.logger.debug(
+            "Sending POST request to %s with data: %s",
+            endpoint,
+            data,
+        )
         response = await self.client.post(endpoint, json=data)
         response.raise_for_status()
+        self.logger.info(
+            "Received response for POST %s with status %d",
+            endpoint,
+            response.status_code,
+        )
         return response.json()
 
     async def close(self) -> None:
         """Close the AsyncClient session."""
+        self.logger.debug("Closing HttpClient session.")
         await self.client.aclose()

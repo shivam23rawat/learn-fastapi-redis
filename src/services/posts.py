@@ -5,6 +5,7 @@ from datetime import timedelta
 from src._client.post import PostServiceClient
 from src._database.redis import redis_client
 from src._schemas.posts import Post
+from src.logger import get_logger
 
 
 class PostService:
@@ -19,6 +20,8 @@ class PostService:
 
     def __init__(self) -> None:
         """Initialize the PostService."""
+        self._logger = get_logger("PostService")
+        self._logger.debug("Initializing PostService.")
         self._client = PostServiceClient()
         self._redis = redis_client
         self._post_cache_expiry_time = timedelta(minutes=5)
@@ -32,12 +35,19 @@ class PostService:
             A list containing all posts.
 
         """
+        self._logger.info("Fetching all posts (with cache).")
         posts = await self._redis.get("all_posts")
         if not posts:
+            self._logger.debug(
+                "Cache miss for all_posts. Fetching from PostServiceClient.",
+            )
             posts = await self._client.get("/posts")
             await self._redis.set(
                 "all_posts",
                 posts,
                 ex=self._post_cache_expiry_time,
             )
+            self._logger.debug("Posts cached in Redis.")
+        else:
+            self._logger.debug("Cache hit for all_posts.")
         return [Post(**post) for post in posts]
