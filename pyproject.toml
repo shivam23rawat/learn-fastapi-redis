@@ -61,6 +61,7 @@ line-length = 79
 
 [tool.ruff.lint]
 select = ["ALL"]
+ignore = ["D203", "D213"] # Ignore D203 (1 blank line before class docstring) and D213 (1 blank line before function docstring) because these are incompatible with newer rules.
 
 [tool.black]
 line-length = 79
