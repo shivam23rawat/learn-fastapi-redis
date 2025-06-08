@@ -1,28 +1,19 @@
-"""HTTP client module using httpx.AsyncClient with singleton pattern."""
+"""Provide a generic asynchronous HTTP client using httpx.
 
-from typing import Any, Optional
+This module defines an asynchronous HTTP client for GET and POST requests.
+"""
+
+from typing import Any
 
 import httpx
 
 
 class HttpClient:
-    """A singleton HTTP client for async GET and POST requests.
+    """A generic HTTP client for async GET and POST requests."""
 
-    Implements the singleton pattern for shared usage.
-    """
-
-    _instance: Optional["HttpClient"] = None
-
-    def __new__(cls) -> "HttpClient":
-        """Create or return the singleton instance."""
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-            cls._instance.client = httpx.AsyncClient()
-        return cls._instance
-
-    def __init__(self) -> None:
+    def __init__(self, base_url: str) -> None:
         """Initialize the AsyncClient instance."""
-        self.client = httpx.AsyncClient()
+        self.client = httpx.AsyncClient(base_url=base_url)
 
     async def get(
         self,

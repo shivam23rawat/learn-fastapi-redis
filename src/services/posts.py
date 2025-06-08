@@ -1,6 +1,7 @@
 """Service module for post-related operations."""
 
-from typing import Any
+from src._client.post import PostServiceClient
+from src._schemas.posts import Post
 
 
 class PostService:
@@ -8,31 +9,23 @@ class PostService:
 
     Methods
     -------
-    get_all_posts() -> List[Dict[str, Any]]
+    get_all_posts() -> list[Post]
         Returns a list of all posts.
 
     """
 
-    def get_all_posts(self) -> list[dict[str, Any]]:
+    def __init__(self) -> None:
+        """Initialize the PostService."""
+        self._client = PostServiceClient()
+
+    async def get_all_posts(self) -> list[Post]:
         """Return a list of all posts.
 
         Returns
         -------
-        List[Dict[str, Any]]
+        list[Post]
             A list containing all posts.
 
         """
-        return [
-            {
-                "userId": 1,
-                "id": 1,
-                "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
-                "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto",
-            },
-            {
-                "userId": 1,
-                "id": 2,
-                "title": "qui est esse",
-                "body": "est rerum tempore vitae\nsequi sint nihil reprehenderit dolor beatae ea dolores neque\nfugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis\nqui aperiam non debitis possimus qui neque nisi nulla",
-            },
-        ]
+        posts = await self._client.get("/posts")
+        return [Post(**post) for post in posts]

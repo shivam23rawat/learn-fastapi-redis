@@ -11,8 +11,8 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
+from src._client.http import HttpClient
 from src.api.v1.router import router as v1_router
-from src.client import HttpClient
 
 
 def create_app() -> FastAPI:

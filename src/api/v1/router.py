@@ -1,6 +1,8 @@
-"""
-This module defines the API router for version 1 of the application.
-It imports the necessary modules and includes the sample router with a specified prefix and tags.
+"""Define the API router for version 1 of the application.
+
+This module imports the necessary modules and includes the sample router
+with a specified prefix and tags.
+
 Attributes
 ----------
 router : fastapi.APIRouter
@@ -11,6 +13,7 @@ fastapi
     The FastAPI framework used to create the API router.
 src.api.v1.users
     The module containing the user router to be included in the main router.
+
 """
 
 from fastapi import APIRouter
