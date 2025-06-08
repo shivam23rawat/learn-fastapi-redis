@@ -1,0 +1,18 @@
+{
+    "version": "0.1.0",
+    "configurations": [
+        {
+            "name": "Python: Run Tests",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/.venv/Scripts/pytest.exe",
+            "args": [
+                "tests/",
+                "--maxfail=1",
+                "--disable-warnings"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        }
+    ]
+}
