@@ -12,6 +12,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from src._client.http import HttpClient
+from src._database.redis import redis_client
 from src.api.v1.router import router as v1_router
 
 
@@ -29,7 +30,8 @@ def create_app() -> FastAPI:
     @asynccontextmanager
     async def lifespan(_app: FastAPI) -> AsyncGenerator[None]:
         yield
-        await HttpClient().close()  # Singleton close
+        await HttpClient().close()
+        await redis_client.client.aclose()
 
     application = FastAPI(
         title="FastAPI Redis Integration Demo",
