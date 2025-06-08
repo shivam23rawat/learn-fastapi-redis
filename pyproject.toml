@@ -56,9 +56,11 @@ version_provider = "uv"
 update_changelog_on_bump = true
 major_version_zero = true
 
+[tool.ruff]
+line-length = 79
+
 [tool.ruff.lint]
 select = ["ALL"]
-line-length = 79
 
 [tool.black]
 line-length = 79

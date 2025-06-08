@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.11.0  # This is the latest version as of 14/3/2025
+    rev: v0.11.13
     hooks:
       - id: ruff
   - repo: https://github.com/psf/black
