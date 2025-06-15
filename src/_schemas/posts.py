@@ -1,6 +1,6 @@
 """Schema definitions for blog posts."""
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class Post(BaseModel):
@@ -11,7 +11,4 @@ class Post(BaseModel):
     title: str
     body: str
 
-    class Config:
-        """Pydantic configuration for the Post schema."""
-
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
