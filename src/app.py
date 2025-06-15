@@ -11,7 +11,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from src._client.http import HttpClient
+from src._client.post import PostServiceClient
 from src._database.redis import redis_client
 from src.api.v1.router import router as v1_router
 from src.logger import get_logger
@@ -28,7 +28,7 @@ def create_app() -> FastAPI:
         logger.info("Application startup: lifespan context entered.")
         yield
         logger.info("Application shutdown: closing HTTP and Redis clients.")
-        await HttpClient().close()
+        await PostServiceClient().close()
         await redis_client.client.aclose()
 
     application = FastAPI(
