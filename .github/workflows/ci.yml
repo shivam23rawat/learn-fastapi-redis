@@ -71,13 +71,18 @@ jobs:
             git push
           fi
 
-      - name: Install test dependencies
-        run: pip install pytest pytest-asyncio httpx
+      - name: Install uv
+        run: pip install uv
+
+      - name: Install all dependencies required for testing
+        run: uv pip install -e .[test]
 
       - name: Run tests
         run: pytest tests/ --maxfail=1 --disable-warnings --tb=short
 
       - name: Build and push Docker image
+        env:
+          IMAGE_TAG: ${{ env.IMAGE_TAG }}
         uses: docker/build-push-action@v4
         with:
           context: .
@@ -86,3 +91,5 @@ jobs:
 
       - name: Image details
         run: echo "Docker image has been pushed to ghcr.io/${{ github.repository }}/fastapi-redis:${{ env.IMAGE_TAG }}"
+        env:
+          IMAGE_TAG: ${{ env.IMAGE_TAG }}
