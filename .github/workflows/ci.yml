@@ -71,14 +71,17 @@ jobs:
             git push
           fi
 
-      - name: Install uv
-        run: pip install uv
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          version: "latest"
+          activate-environment: true
+      
+      - name: Install test dependencies
+        run: uv sync --group=test
 
-      - name: Install all dependencies required for testing
-        run: uv pip install -e .[test]
-
-      - name: Run tests
-        run: pytest tests/ --maxfail=1 --disable-warnings --tb=short
+      - name: Run tests with uv in virtual environment
+        run: uv run pytest tests/ --maxfail=1 --disable-warnings --tb=short
 
       - name: Build and push Docker image
         env:
