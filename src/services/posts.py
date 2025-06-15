@@ -18,12 +18,16 @@ class PostService:
 
     """
 
-    def __init__(self) -> None:
-        """Initialize the PostService."""
+    def __init__(
+        self,
+        client: object = None,
+        redis: object = None,
+    ) -> None:
+        """Init PostService with optional client and redis for tests."""
         self._logger = get_logger("PostService")
         self._logger.debug("Initializing PostService.")
-        self._client = PostServiceClient()
-        self._redis = redis_client
+        self._client = client if client is not None else PostServiceClient()
+        self._redis = redis if redis is not None else redis_client
         self._post_cache_expiry_time = timedelta(minutes=5)
 
     async def get_all_posts(self) -> list[Post]:
