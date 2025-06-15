@@ -2,7 +2,7 @@
 
 import time
 import uuid
-from collections.abc import Callable
+from collections.abc import Awaitable, Callable
 
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
@@ -20,7 +20,7 @@ class RequestLoggingMiddleware(BaseHTTPMiddleware):
     async def dispatch(
         self,
         request: Request,
-        call_next: Callable,
+        call_next: Callable[[Request], Awaitable[Response]],
     ) -> Response:
         """Log request and response details including timing and IDs."""
         request_id = str(uuid.uuid4())
@@ -39,7 +39,7 @@ class RequestLoggingMiddleware(BaseHTTPMiddleware):
         )
         response: Response = await call_next(request)
         process_time = round((time.perf_counter() - start_time) * 1000, 2)
-        set_process_time(process_time)
+        set_process_time(str(process_time))
         http_error_status = 400
         if response.status_code >= http_error_status:
             logger.warning(
