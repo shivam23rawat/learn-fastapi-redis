@@ -82,6 +82,8 @@ jobs:
 
       - name: Run tests with uv in virtual environment
         run: uv run pytest tests/ --maxfail=1 --disable-warnings --tb=short
+        env:
+          POST_SERVICE_URL: ${{ vars.POST_SERVICE_URL }}
 
       - name: Build and push Docker image
         env:
