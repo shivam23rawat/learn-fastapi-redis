@@ -15,6 +15,7 @@ from src._client.post import PostServiceClient
 from src._database.redis import redis_client
 from src.api.v1.router import router as v1_router
 from src.logger import get_logger
+from src.middleware.rate_limit import RateLimitMiddleware
 from src.middleware.request import RequestLoggingMiddleware
 
 
@@ -41,6 +42,7 @@ def create_app() -> FastAPI:
     )
     logger.info("FastAPI app created. Adding middleware and routers.")
     application.add_middleware(RequestLoggingMiddleware)
+    application.add_middleware(RateLimitMiddleware)
     application.include_router(v1_router)
     return application
 

@@ -65,6 +65,11 @@ class AsyncRedisClient:
         self.logger.debug("Cache miss for key '%s'.", key)
         return None
 
+    async def incr(self, key: str) -> int:
+        """Increment the integer value of a key by one."""
+        self.logger.debug("Incrementing key '%s' in Redis.", key)
+        return await self.client.incr(key)
+
 
 # Singleton instance for use throughout the app
 redis_client = AsyncRedisClient(host="localhost", port=6379, db=0)
