@@ -4,6 +4,7 @@ import logging
 import sys
 from logging import Logger
 
+from src.config import settings
 from src.context import get_correlation_id, get_process_time, get_request_id
 
 LOG_FORMAT = (
@@ -42,5 +43,7 @@ def get_logger(name: str = "app") -> Logger:
         handler.setFormatter(formatter)
         handler.addFilter(RequestContextFilter())
         logger.addHandler(handler)
-        logger.setLevel(logging.INFO)
+        # Set log level from environment/config
+        log_level = settings.log_level.upper()
+        logger.setLevel(getattr(logging, log_level, logging.INFO))
     return logger
